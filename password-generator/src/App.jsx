@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect, useRef } from "react";
+import usePasswordSuggestions from "./hooks/usePasswordSuggestions";
 
 function App() {
   const [length, setLength] = useState(8);
@@ -6,21 +7,12 @@ function App() {
   const [charAllowed, setCharAllowed] = useState(false);
   const [password, setPassword] = useState("");
   const [copied, setCopied] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
 
   const passRef = useRef(null);
 
+  const suggestions = usePasswordSuggestions(length, numAllowed, charAllowed);
+
   const passwordGenerator = useCallback(() => {
-    if (length < 6) {
-      setSuggestions(["Password length must be at least 6 characters."]);
-      return;
-    }
-
-    if (!numAllowed && !charAllowed) {
-      setSuggestions(["Please select at least one character type."]);
-      return;
-    }
-
     let pass = "";
     let str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     if (numAllowed) str += "0123456789";
@@ -30,7 +22,6 @@ function App() {
       pass += str.charAt(char);
     }
     setPassword(pass);
-    setSuggestions([]);
   }, [length, numAllowed, charAllowed]);
 
   const copyToClipboard = useCallback(() => {
@@ -64,7 +55,7 @@ function App() {
             <button
               onClick={copyToClipboard}
               className={`outline-none font-semibold bg-sky-700 text-white px-3 py-2 rounded-br-xl rounded-tr-xl ${
-                copied ? "bg-green-500" : ""
+                copied ? "bg-green-600" : ""
               }`}
             >
               {copied ? "COPIED" : "COPY"}
