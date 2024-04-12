@@ -28,11 +28,8 @@ function InputBox({
           placeholder="Amount"
           disabled={amountDisable}
           value={amount}
-          onChange={(e) =>{
-
-            const val = Number(e.target.value)
-            if(val>=0)   onAmountChange && onAmountChange()
-          }
+          onChange={(e) =>
+            onAmountChange && onAmountChange(Number(e.target.value))
           }
         />
       </div>
